@@ -4,7 +4,7 @@ using TaskManagementSystem.TaskService.Core.Algorithms.NumeralRank.Interfaces;
 using TaskManagementSystem.TaskService.Core.Interfaces;
 using NumeralRankContext = TaskManagementSystem.TaskService.Core.Algorithms.NumeralRank.NumeralRankContext;
 
-namespace TaskManagementSystem.TaskService.Core.Services;
+namespace TaskManagementSystem.TaskService.Core.Services.NumeralRank;
 
 
 public class GetLatestTaskRankService
@@ -39,7 +39,7 @@ public class GetLatestTaskRankService
 
         if (!newRank.IsValid)
         {
-            throw new AppUnexpectedException();
+            throw new AppUnexpectedException("Generated rank is not valid.");
         }
 
         return newRank.Rank;

@@ -1,25 +1,25 @@
 using System.Linq.Expressions;
+using TaskManagementSystem.TaskService.Core.Aggregates;
 using TaskManagementSystem.TaskService.Core.Algorithms.NumeralRank.Interfaces;
-using TaskManagementSystem.TaskService.Core.Interfaces.Repository;
-using TaskManagementSystem.TaskService.Core.Models;
+using TaskManagementSystem.TaskService.Core.Interfaces;
 
 namespace TaskManagementSystem.TaskService.Core.Algorithms.NumeralRank.Strategies.Validations;
 
 
 public class BetweenNumeralRankValidationStrategy : INumeralRankValidationStrategy
 {
-    private readonly ITaskBoardRepository _boardRepository;
+    private readonly ITaskRepository _taskRepository;
 
-    public BetweenNumeralRankValidationStrategy(ITaskBoardRepository boardRepository)
+    public BetweenNumeralRankValidationStrategy(ITaskRepository taskRepository)
     {
-        _boardRepository = boardRepository ?? throw new ArgumentNullException(nameof(boardRepository));
+        _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
     }
 
     public async Task<bool> ValidateAsync(Guid boardId, NumeralRankContext context, CancellationToken cancellationToken)
     {
-        Expression<Func<TaskBoardColumnModel, bool>> predicate = c => c.Order >= context.PreviousRank && c.Order <= context.NextRank;
+        Expression<Func<TaskAggregate, bool>> predicate = c => c.Rank >= context.PreviousRank && c.Rank <= context.NextRank;
 
-        IEnumerable<TaskBoardColumnModel> columns = (await _boardRepository.FilterColumnsAsync(
+        IEnumerable<TaskAggregate> columns = (await _taskRepository.FilterAsync(
             taskBoardId: boardId,
             predicate: predicate,
             cancellationToken: cancellationToken
@@ -30,12 +30,12 @@ public class BetweenNumeralRankValidationStrategy : INumeralRankValidationStrate
             return false;
         }
 
-        var orderedColumns = columns.OrderBy(c => c.Order).ToList();
+        var orderedColumns = columns.OrderBy(c => c.Rank).ToList();
 
-        if (orderedColumns[0].Order != context.PreviousRank ||
-            orderedColumns[1].Order != context.NextRank ||
-            orderedColumns[0].Order > orderedColumns[1].Order ||
-            orderedColumns[0].Order == orderedColumns[1].Order)
+        if (orderedColumns[0].Rank != context.PreviousRank ||
+            orderedColumns[1].Rank != context.NextRank ||
+            orderedColumns[0].Rank > orderedColumns[1].Rank ||
+            orderedColumns[0].Rank == orderedColumns[1].Rank)
         {
             return false;
         }

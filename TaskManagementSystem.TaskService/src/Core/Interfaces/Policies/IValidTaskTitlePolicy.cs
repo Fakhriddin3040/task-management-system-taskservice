@@ -1,12 +1,12 @@
 namespace TaskManagementSystem.TaskService.Core.Interfaces.Policies;
 
 
-public interface IValidTaskNamePolicy
+public interface IValidTaskTitlePolicy
 {
     /// <summary>
     /// Validates the task description.
     /// </summary>
-    /// <param name="description">The task description to validate.</param>
+    /// <param name="title">The task description to validate.</param>
     /// <returns>True if the description is valid, otherwise false.</returns>
-    bool IsValid(string description);
+    bool IsValid(string title);
 }

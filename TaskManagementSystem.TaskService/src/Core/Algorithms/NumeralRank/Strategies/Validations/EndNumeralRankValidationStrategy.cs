@@ -1,23 +1,25 @@
 using System.Linq.Expressions;
+using TaskManagementSystem.TaskService.Core.Aggregates;
 using TaskManagementSystem.TaskService.Core.Algorithms.NumeralRank.Interfaces;
-using TaskManagementSystem.TaskService.Core.Interfaces.Repository;
-using TaskManagementSystem.TaskService.Core.Models;
+using TaskManagementSystem.TaskService.Core.Interfaces;
 
 namespace TaskManagementSystem.TaskService.Core.Algorithms.NumeralRank.Strategies.Validations;
 
 
 public class EndNumeralRankValidationStrategy : INumeralRankValidationStrategy
 {
-    // public EndNumeralRankValidationStrategy(ITaskBoardRepository boardRepository)
-    // {
-    //     _boardRepository = boardRepository;
-    // }
+    private readonly ITaskRepository _taskRepository;
+
+    public EndNumeralRankValidationStrategy(ITaskRepository taskRepository)
+    {
+        _taskRepository = taskRepository;
+    }
 
     public async Task<bool> ValidateAsync(Guid boardId, NumeralRankContext context, CancellationToken cancellationToken)
     {
-        Expression<Func<TaskBoardColumnModel, bool>> filter = col => col.Order >= context.PreviousRank;
+        Expression<Func<TaskAggregate, bool>> filter = col => col.Rank >= context.PreviousRank;
 
-        var columns = (await _boardRepository.FilterColumnsAsync(
+        var columns = (await _taskRepository.FilterAsync(
             taskBoardId: boardId,
             predicate: filter,
             cancellationToken: cancellationToken

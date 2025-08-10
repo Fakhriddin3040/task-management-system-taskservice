@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManagementSystem.SharedLib\TaskManagementSystem.SharedLib.csproj" />
     <ProjectReference Include="..\TaskManagementSystem.GrpcLib\TaskManagementSystem.GrpcLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="src\Core\Services\NumeralRank\" />
   </ItemGroup>
 
 </Project>

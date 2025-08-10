@@ -23,9 +23,13 @@ public interface ITaskRepository
         Guid boardId,
         CancellationToken cancellationToken
         );
+    Task<IEnumerable<TaskAggregate>> FilterAsync(
+        Guid taskBoardId,
+        Expression<Func<TaskAggregate, bool>> predicate,
+        CancellationToken cancellationToken
+        );
     void Update(TaskAggregate task);
     Task DeleteAsync(Guid taskId, CancellationToken cancellationToken);
     Task<bool> ExistsAsync(Expression<Func<TaskAggregate, bool>> predicate, CancellationToken cancellationToken);
-    Task<bool> HasAnyColumnAsync(Guid taskId, CancellationToken cancellationToken);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
