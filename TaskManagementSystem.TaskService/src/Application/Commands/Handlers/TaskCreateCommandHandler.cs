@@ -73,6 +73,7 @@ public class TaskCreateCommandHandler : IRequestHandler<TaskCreateCommand, Resul
         var task = result.Value;
 
         await _taskRepository.CreateAsync(task, cancellationToken);
+        await _taskRepository.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Task created successfully with ID: {TaskId}", task.Id);
 

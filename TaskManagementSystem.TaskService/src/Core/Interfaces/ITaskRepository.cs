@@ -6,15 +6,15 @@ namespace TaskManagementSystem.TaskService.Core.Interfaces;
 
 public interface ITaskRepository
 {
-    Task<IEnumerable<TaskAggregate>> GetAllByBoardIdAsync(
+    Task<List<TaskAggregate>> GetAllByBoardIdAsync(
         Guid boardId,
         CancellationToken cancellationToken
         );
-    Task<IEnumerable<TaskAggregate>> GetAllByColumnIdAsync(
+    Task<List<TaskAggregate>> GetAllByColumnIdAsync(
         Guid columnId,
         CancellationToken cancellationToken
         );
-    Task<TaskAggregate> GetByIdAsync(Guid taskId, CancellationToken cancellationToken);
+    Task<TaskAggregate?> GetByIdAsync(Guid taskId, CancellationToken cancellationToken);
     Task CreateAsync(
         TaskAggregate task,
         CancellationToken cancellationToken
@@ -23,13 +23,13 @@ public interface ITaskRepository
         Guid boardId,
         CancellationToken cancellationToken
         );
-    Task<IEnumerable<TaskAggregate>> FilterAsync(
+    Task<List<TaskAggregate>> FilterAsync(
         Guid taskBoardId,
         Expression<Func<TaskAggregate, bool>> predicate,
         CancellationToken cancellationToken
         );
     void Update(TaskAggregate task);
-    Task DeleteAsync(Guid taskId, CancellationToken cancellationToken);
+    Task<int> DeleteAsync(Guid taskId, CancellationToken cancellationToken);
     Task<bool> ExistsAsync(Expression<Func<TaskAggregate, bool>> predicate, CancellationToken cancellationToken);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

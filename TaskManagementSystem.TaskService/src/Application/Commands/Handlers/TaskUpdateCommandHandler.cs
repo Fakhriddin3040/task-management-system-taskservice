@@ -3,6 +3,7 @@ using TaskManagementSystem.SharedLib.Abstractions.Interfaces;
 using TaskManagementSystem.SharedLib.Exceptions;
 using TaskManagementSystem.SharedLib.Extensions;
 using TaskManagementSystem.SharedLib.Handlers;
+using TaskManagementSystem.SharedLib.Providers.Interfaces;
 using TaskManagementSystem.TaskService.Application.Commands.Commands;
 using TaskManagementSystem.TaskService.Core.Interfaces;
 using TaskManagementSystem.TaskService.Core.Interfaces.Policies;
@@ -27,14 +28,14 @@ public class TaskUpdateCommandHandler : IRequestHandler<TaskUpdateCommand, Resul
         IValidTaskTitlePolicy titlePolicy,
         IValidTaskDescriptionPolicy descriptionPolicy,
         ILogger<TaskUpdateCommandHandler> logger,
-        ExecutionContext executionContext)
+        IExecutionContextProvider executionContextProvider)
     {
         _taskRepository = taskRepository;
         _dateTimeService = dateTimeService;
         _titlePolicy = titlePolicy;
         _descriptionPolicy = descriptionPolicy;
         _logger = logger;
-        _executionContext = executionContext;
+        _executionContext = executionContextProvider.GetContext();
     }
 
     public async Task<Result<Unit>> Handle(TaskUpdateCommand request, CancellationToken cancellationToken)

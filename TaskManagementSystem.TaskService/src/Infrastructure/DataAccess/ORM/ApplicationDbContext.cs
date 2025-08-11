@@ -7,7 +7,7 @@ namespace TaskManagementSystem.TaskService.Infrastructure.DataAccess.ORM;
 
 public class ApplicationDbContext : DbContext
 {
-    DbSet<TaskAggregate> Tasks { get; set; }
+    public DbSet<TaskAggregate> Tasks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,10 +22,9 @@ public class ApplicationDbContext : DbContext
         builder.HasKey(x => x.Id);
 
         builder.HasIndex(x => new {
-                x.BoardId,
-                x.ColumnId
-            })
-            .IsUnique();
+            x.BoardId,
+            x.ColumnId
+        });
 
         builder.HasIndex(x => new {
                 x.Rank,

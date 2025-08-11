@@ -2,6 +2,7 @@ using MediatR;
 using TaskManagementSystem.SharedLib.Abstractions.Interfaces;
 using TaskManagementSystem.SharedLib.Algorithms.NumeralRank;
 using TaskManagementSystem.SharedLib.Exceptions;
+using TaskManagementSystem.SharedLib.Providers.Interfaces;
 using TaskManagementSystem.TaskService.Application.Commands.Commands;
 using TaskManagementSystem.TaskService.Core.Interfaces;
 using TaskManagementSystem.TaskService.Core.Services.NumeralRank;
@@ -24,13 +25,13 @@ public class TaskMoveCommandHandler : IRequestHandler<TaskMoveCommand>
         IDateTimeService dateTimeService,
         ILogger<TaskMoveCommandHandler> logger,
         NumeralRankGenerationService numeralRankGenerationService,
-        ExecutionContext executionContext)
+        IExecutionContextProvider executionContextProvider)
     {
         _taskRepository = taskRepository;
         _dateTimeService = dateTimeService;
         _logger = logger;
         _numeralRankGenerationService = numeralRankGenerationService;
-        _executionContext = executionContext;
+        _executionContext = executionContextProvider.GetContext();
     }
 
     public async Task Handle(TaskMoveCommand request, CancellationToken cancellationToken)
