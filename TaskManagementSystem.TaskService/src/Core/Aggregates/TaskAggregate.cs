@@ -55,7 +55,7 @@ public class TaskAggregate : TaskModel
             Title = title,
             Description = description,
             BoardId = boardId,
-            AssignedTo = assignedToId,
+            AssignedToId = assignedToId,
             ColumnId = columnId,
             Timestamps = Timestamps.FromDateTimeService(dateTimeService),
             AuthorInfo = new AuthorInfo(createdById, createdById),
@@ -89,7 +89,7 @@ public class TaskAggregate : TaskModel
 
         Title = title;
         Description = description;
-        AssignedTo = assignedToId;
+        AssignedToId = assignedToId;
         Deadline = deadLine;
         Touch(dateTimeService, updatedById);
 

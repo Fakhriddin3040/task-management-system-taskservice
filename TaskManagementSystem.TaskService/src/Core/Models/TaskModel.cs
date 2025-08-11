@@ -9,9 +9,9 @@ public class TaskModel
 {
     public Guid Id { get; set; }
     public Guid BoardId { get; set; }
-    public Guid AssignedTo { get; set; }
+    public Guid AssignedToId { get; set; }
     public Guid ColumnId { get; set; }
-        public string Title { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
     public long Rank { get; set; }
     public long Deadline { get; set; }
