@@ -20,7 +20,6 @@ public class TaskCreateCommandHandler : IRequestHandler<TaskCreateCommand, Resul
     private readonly ITaskRepository _taskRepository;
     private readonly ILogger<TaskCreateCommandHandler> _logger;
     private readonly IDateTimeService _dateTimeService;
-    private readonly INumeralRankStrategySelector _numeralRankStrategySelector;
     private readonly IValidTaskTitlePolicy _titlePolicy;
     private readonly IValidTaskDescriptionPolicy _descriptionPolicy;
     private readonly ExecutionContext _executionContext;
@@ -30,7 +29,6 @@ public class TaskCreateCommandHandler : IRequestHandler<TaskCreateCommand, Resul
         ITaskRepository taskRepository,
         ILogger<TaskCreateCommandHandler> logger,
         IDateTimeService dateTimeService,
-        INumeralRankStrategySelector numeralRankStrategySelector,
         INumeralRankValidationStrategySelector numeralRankValidationStrategySelector,
         IValidTaskTitlePolicy titlePolicy,
         IValidTaskDescriptionPolicy descriptionPolicy,
@@ -40,7 +38,6 @@ public class TaskCreateCommandHandler : IRequestHandler<TaskCreateCommand, Resul
         _taskRepository = taskRepository;
         _logger = logger;
         _dateTimeService = dateTimeService;
-        _numeralRankStrategySelector = numeralRankStrategySelector;
         _titlePolicy = titlePolicy;
         _descriptionPolicy = descriptionPolicy;
         _getLatestTaskRankService = getLatestTaskRankService;
