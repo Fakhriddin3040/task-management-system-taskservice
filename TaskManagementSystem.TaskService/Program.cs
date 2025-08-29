@@ -1,5 +1,7 @@
 using TaskManagementSystem.GrpcLib.Configurations.AspNet;
 using TaskManagementSystem.TaskService.Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore;
+using TaskManagementSystem.TaskService.Infrastructure.DataAccess.ORM;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,12 @@ builder.Services.AddLogging(l =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();   // ⚡ вот оно
+}
 
 app.UseApplicationGrpcLib();
 

@@ -1,0 +1,62 @@
+services:
+  # ---------- PostgreSQL для TaskService ----------
+  tms-task-db:
+    image: postgres:16-alpine
+    container_name: tms-task-db
+    environment:
+      POSTGRES_DB: "tms_board"
+      POSTGRES_USER: "tms_board"
+      POSTGRES_PASSWORD: "tms_board"
+
+    volumes:
+      - tms_task_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - tms-task-net
+    ports:
+      - "5435:5432"
+
+  tms-task:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: tms-task:latest
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+      ASPNETCORE_Kestrel__EndpointDefaults__Protocols: "Http2"
+
+      RabbitMq__Host: "tms-rabbit"
+
+      Database__Host: "tms-task-db"
+      Database__Port: "5432"
+      Database__User: "tms_board"
+      Database__Password: "tms_board"
+      Database__Database: "tms_board"
+      Logging__LogLevel__Default: "Information"
+      Logging__LogLevel__Grpc: "Debug"
+      Logging__LogLevel__Microsoft.AspNetCore.Routing: "Debug"
+
+    ports:
+      - "50054:8080"
+    depends_on:
+      tms-task-db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - tms-task-net
+      - tms
+
+networks:
+  # приватная сеть только для task и его БД
+  tms-task-net: {}
+  # внешняя сеть, должна существовать (docker network create tms)
+  tms:
+    external: true
+
+volumes:
+  tms_task_pgdata: {}
